@@ -1,0 +1,8 @@
+{
+  "name": "node-auth-tut",
+  "version": "1.0.0",
+  "description": "authentication system for login and saving passwords in secure way.",
+  "main": "app.js",
+  "author": "Rishabh Singh",
+  "license": "MIT"
+}
