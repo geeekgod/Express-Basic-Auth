@@ -27,6 +27,22 @@ app.post("/users", async (req, res) => {
     users.push(user);
     res.status(201).json({ message: "User login" });
   } catch {
-    res.status(500);
+    res.status(500).json();
+  }
+});
+
+app.post("/users/login", async (req, res) => {
+  const user = users.find((user) => user.name === req.body.name);
+  if (!user) {
+    return res.status(400).json({ err: "User not found please register" });
+  }
+  try {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      res.json({ message: "Logged in !!" });
+    } else {
+      res.json({ err: "Incorrect Password" });
+    }
+  } catch {
+    res.status(500).json();
   }
 });
