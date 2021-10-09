@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -12,17 +14,19 @@ app.listen(port, () => {
 
 app.use(express.urlencoded());
 app.use(express.json());
+app.use(cors());
 
 app.get("/users", (req, res) => {
   res.json(users);
 });
 
-app.post("/users", (req, res) => {
-  if (req.body.name && req.body.password) {
-    const user = { name: req.body.name, password: req.body.password };
+app.post("/users", async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = { name: req.body.name, password: hashedPassword };
     users.push(user);
     res.status(201).json({ message: "User login" });
-  } else {
-    res.json({ err: "Please enter data" });
+  } catch {
+    res.status(500);
   }
 });
